@@ -22,7 +22,7 @@ const server = http.createServer(async (req, res) => {
                     return ` <div class="container">
                         <h2>${product.title}</h2>
                         <p>${product.description}</p>
-                        <p>${product.price}</p>
+                        <p>$${product.price}</p>
                         <img src="${product.image}" height="200" width="150" alt="${product.title}" />
                         
                     </div>`;

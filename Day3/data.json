@@ -1,0 +1,26 @@
+[
+  {
+    "roll no": 1,
+    "name": "John",
+    "class": 12,
+    "section": "A"
+  },
+  {
+    "roll no": 2,
+    "name": "Doe",
+    "class": 12,
+    "section": "B"
+  },
+  {
+    "roll no": 3,
+    "name": "Sam",
+    "class": 12,
+    "section": "C"
+  },
+  {
+    "roll no": 4,
+    "name": "Devansh",
+    "class": 12,
+    "section": "B"
+  }
+]
