@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './UpdateBook.css';
 
 const UpdateBook = () => {
   const [books, setBooks] = useState([]);
-  const [selectedBookId, setSelectedBookId] = useState('');
-  const [formData, setFormData] = useState({
-    title: '',
-    author: '',
-    date: '',
-    image: ''
-  });
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [updatedData, setUpdatedData] = useState({ title: '', author: '', date: '', image: '' });
 
   useEffect(() => {
     fetchBooks();
@@ -18,7 +12,7 @@ const UpdateBook = () => {
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get('https://book-app-31ms.onrender.com/books');
+      const res = await axios.get('http://localhost:9000/books');
       setBooks(res.data);
     } catch (error) {
       console.error(error);
@@ -26,32 +20,20 @@ const UpdateBook = () => {
     }
   };
 
-  const handleSelect = (id) => {
-    const selected = books.find(book => book._id === id);
-    if (selected) {
-      setSelectedBookId(id);
-      setFormData({
-        title: selected.title,
-        author: selected.author,
-        date: selected.date,
-        image: selected.image
-      });
-    }
+  const handleEdit = (book) => {
+    setSelectedBook(book);
+    setUpdatedData({ title: book.title, author: book.author, date: book.date, image: book.image });
   };
 
-  const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+  const handleUpdate = async () => {
+    if (!selectedBook) return;
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
     try {
-      await axios.put(`https://book-app-31ms.onrender.com/books/${selectedBookId}`, formData);
+      await axios.put(`http://localhost:9000/books/${selectedBook._id}`, updatedData);
       alert('Book updated successfully');
-      fetchBooks();
+      setSelectedBook(null);
+      setUpdatedData({ title: '', author: '', date: '', image: '' });
+      await fetchBooks(); // Refresh book list after update
     } catch (error) {
       console.error(error);
       alert('Error updating book');
@@ -59,49 +41,51 @@ const UpdateBook = () => {
   };
 
   return (
-    <div className="update-book-container">
-      <h2>Update Book</h2>
-      <h4>Select a book to update:</h4>
-      <ul className="book-list">
-        {books.map(book => (
-          <li key={book._id}>
-            <strong>{book.title}</strong> by {book.author}
-            <button onClick={() => handleSelect(book._id)}>Edit</button>
-          </li>
-        ))}
-      </ul>
+    <div>
+      <h2>Update Books</h2>
+      {books.length === 0 ? (
+        <p>No books available</p>
+      ) : (
+        <ul>
+          {books.map((book) => (
+            <li key={book._id}>
+              <strong>{book.title}</strong> by {book.author}{' '}
+              <button onClick={() => handleEdit(book)}>Edit</button>
+            </li>
+          ))}
+        </ul>
+      )}
 
-      {selectedBookId && (
-        <form onSubmit={handleUpdate} className="update-book-form">
+      {selectedBook && (
+        <div>
+          <h3>Update Book Details</h3>
           <input
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
+            type="text"
             placeholder="Title"
-            required
+            value={updatedData.title}
+            onChange={(e) => setUpdatedData({ ...updatedData, title: e.target.value })}
           />
           <input
-            name="author"
-            value={formData.author}
-            onChange={handleChange}
+            type="text"
             placeholder="Author"
-            required
+            value={updatedData.author}
+            onChange={(e) => setUpdatedData({ ...updatedData, author: e.target.value })}
           />
           <input
-            name="date"
-            type="date"
-            value={formData.date}
-            onChange={handleChange}
-            placeholder="Publish Date"
+            type="text"
+            placeholder="Date"
+            value={updatedData.date}
+            onChange={(e) => setUpdatedData({ ...updatedData, date: e.target.value })}
           />
           <input
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
+            type="text"
             placeholder="Image URL"
+            value={updatedData.image}
+            onChange={(e) => setUpdatedData({ ...updatedData, image: e.target.value })}
           />
-          <button type="submit">Update Book</button>
-        </form>
+          <button onClick={handleUpdate}>Update</button>
+          <button onClick={() => setSelectedBook(null)}>Cancel</button>
+        </div>
       )}
     </div>
   );
