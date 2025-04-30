@@ -1,0 +1,53 @@
+/* Reset body padding to ensure it accounts for fixed navbar */
+body {
+  padding-top: 70px; /* Adjust if navbar height changes */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #AFDDE5; /* Soft sky blue */
+  color: #003135; /* Dark teal */
+  line-height: 1.6;
+}
+
+/* Navbar container */
+nav {
+  background-color: #024950; /* Deep turquoise */
+  padding: 15px 20px;
+  display: flex;
+  justify-content: center; /* Center nav content */
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Nav links container */
+nav .nav-links {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Nav individual links */
+nav a {
+  color: #FFF;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+}
+
+nav a:hover {
+  background-color: #0FA4AF;
+  color: #FFF;
+}
+
+nav a.active {
+  background-color: #964734;
+  color: #FFF;
+}
